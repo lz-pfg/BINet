@@ -37,6 +37,7 @@ pip install -r requirements.txt
     4. Street View Text (SVT)
     5. Street View Text-Perspective (SVTP)
     6. CUTE80 (CUTE)
+  
   Original version of evaluation datasets can be found in https://github.com/ku21fan/STR-Fewer-Labels/blob/main/data.md.
 
 
