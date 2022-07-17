@@ -279,7 +279,7 @@ def set_cfg(cfg, dsname):
     # texrnet #
     ###########
     cfg.MODEL.TEXRNET.MODEL_TAGS = ['deeplab']
-    cfg.MODEL.TEXRNET.PRETRAINED_PTH = None #'/home/lz4/Documents/textseg/pretrained/init/texrnet_deeplab.pth' #None
+    cfg.MODEL.TEXRNET.PRETRAINED_PTH = None 
     cfg.MODEL.TEXRNET.INPUT_CHANNEL_NUM = \
         cfg.MODEL.DEEPLAB.OUTPUT_CHANNEL_NUM
     cfg.MODEL.TEXRNET.SEMANTIC_CLASS_NUM = \
