@@ -4,7 +4,7 @@
 
 ECCV 2022
 
-![2](./fig/2.jpg)
+![22](./fig/22.jpg)
 
 ## Runtime Environment
 
