@@ -117,64 +117,11 @@ class icdar13(ds_base):
                 dirinfo['50_test_bdi'] = \
                     osp.join(self.root_dir, 'Born_Digital_Images', 'test')
             elif m == 'test_fst':
-                #dirinfo['51_test_fst'] = \
-                #    osp.join(self.root_dir, 'Focused_Scene_Text', 'test')
-                #dirinfo['51_test_fst'] = osp.join(self.root_dir, 'train_images')
-                dirinfo['51_test_fst'] = self.root_dir
+                dirinfo['51_test_fst'] = \
+                    osp.join(self.root_dir, 'Focused_Scene_Text', 'test')
             else:
                 raise ValueError
-        """
-        imgs_dir = osp.join(self.root_dir, 'train_images')
-        list_file_path = osp.join(self.root_dir, 'train_list.txt')
-        list_file = open(list_file_path, 'r')
-        image_lines = list_file.readlines()
-        #image_lists = [os.path.join(imgs_dir, line.strip()) for line in image_lines]
-        self.load_info = []
-        for line in image_lines:
-            img = line.strip().split('/')[1]
-            fn = img.split('.')[0]
-            info = {
-                'unique_id': fn,
-                'filename': fn,
-                'image_path': osp.join(imgs_dir, line.strip()),
-                'seglabel_path': None,
-                # 'bbox_path': [word_bbox_path, letter_bbox_path],
-            }
-            self.load_info.append(info)
         
-        self.load_info = []
-        for tagi, diri in dirinfo.items():
-            for imi in os.listdir(osp.join(diri, 'images')):
-                fn = imi.split('.')[0]
-                possible_gt_name = [
-                    'gt_{}.png'.format(fn),
-                    '{}_GT.bmp'.format(fn),
-                ]
-                seglabel_path = None
-                for pi in possible_gt_name:
-                    pi_full = osp.join(
-                        diri, 'GT_Text_Segmentation', pi)
-                    if osp.exists(pi_full):
-                        seglabel_path = pi_full
-                if seglabel_path is None:
-                    raise ValueError
-
-                word_bbox_path = osp.join(
-                    diri, 'GT_Text_Localization', 'gt_{}.txt'.format(fn))
-                letter_bbox_path = osp.join(
-                    diri, 'GT_Char_Localization', '{}_GT.txt'.format(fn))
-                if not osp.exists(letter_bbox_path):
-                    letter_bbox_path = None
-
-                info = {
-                    'unique_id': tagi+'_'+fn, 
-                    'filename': fn, 
-                    'image_path': osp.join(diri, 'images', imi),
-                    'seglabel_path': seglabel_path,
-                    'bbox_path': [word_bbox_path, letter_bbox_path],
-                } 
-                self.load_info.append(info)
-        """
     def get_semantic_classname(self, cls_n=None):
         if cls_n is None:
             cls_n = cfguh().cfg.DATA.CLASS_NUM
@@ -230,17 +177,7 @@ class CharBboxLoader(object):
                 return np.zeros([0, 6], dtype=float)
             else:
                 return np.array(bbox, dtype=float)
-        """
-        bbox = []
-
-        for ji in bbox_jinfo:
-            bbox.append(ji[0:6])
-
-        if len(bbox)==0:
-            return np.zeros([0, 6], dtype=float)
-        else:
-            return np.array(bbox, dtype=float)
-        """
+        
 
 @regloader({
     'ignore_label' : 'IGNORE_LABEL',
@@ -306,44 +243,7 @@ class CharBboxSpLoader(object):
                     element['bbox_squared'] = np.zeros((0, 6)).astype(int)
                     bbox = np.zeros((0, 6)).astype(float)
                 return bbox
-            # idi>0 remove the background
-        """
-        lcmap = {}
-        for bboxi in jsoninfo:
-            clsid, insid = bboxi[4:6]
-            lcmap[insid] = clsid
 
-        ins = element['seglabel']
-        insoh = nputils.one_hot_2d(ignore_label=self.ig)(ins)
-        bbox = nputils.bbox_binary(is_coord=False)(insoh)
-        bbox = [
-            list(bi)+[lcmap[idi], idi] \
-                for idi, bi in enumerate(bbox) if (bi.sum()!=0) and (idi>0)]
-        # idi>0 remove the background
-        
-        # square the bbox
-        bbox_squared = []
-        for h1, w1, h2, w2, clsi, idi in bbox:
-            d = (h2-h1) - (w2-w1)
-            if d>0:
-                w1 -= d//2
-                w2 += d-d//2
-            else:
-                h1 -= -(d//2)
-                h2 += -(d-d//2)
-            bbox_squared.append([h1, w1, h2, w2, clsi, idi])
-
-        if (len(bbox) != 0) and (self.square_bbox):
-            element['bbox_squared'] = np.array(bbox_squared).astype(int)
-            bbox = element['bbox_squared'].astype(float)
-        elif (len(bbox) != 0) and (not self.square_bbox):
-            element['bbox_squared'] = np.array(bbox_squared).astype(int)
-            bbox = np.array(bbox).astype(float)
-        else:
-            element['bbox_squared'] = np.zeros((0, 6)).astype(int)
-            bbox = np.zeros((0, 6)).astype(float)
-        return bbox
-        """
 
 @regloader({
     'ignore_label' : 'IGNORE_LABEL',})
@@ -426,41 +326,7 @@ class Icdar13_CharBboxLoader_Original(object):
                 r, g, b = color
                 cmap[r * 256 * 256 + g * 256 + b] = insid
             element['char_colormap'] = cmap
-        """
-        bbox = []
-        bbox_ignore = []
-        cmap = {255*256*256 + 255*256 + 255 : 0} # white is bg
-        for li in l:
-            isignore = False
-            if li[0] == '#':
-                # the ignore case
-                li = li[1:]
-                isignore = True
-
-            lsplit = li.strip().split(' ')
-            if len(lsplit) != 10:
-                continue
-
-            color = [int(i) for i in lsplit[:3]]
-            coord = [int(i) for i in lsplit[5:9]]
-            char = lsplit[-1].split('"')[1]
-
-            clsid = self.map[char] if char in self.map else 36
-
-            if not isignore:
-                insid = len(bbox) + 1
-                w1, h1, w2, h2 = coord
-                bbox.append([h1, w1, h2, w2, clsid, insid, char])
-            else:
-                insid = self.ig
-                w1, h1, w2, h2 = coord
-                bbox_ignore.append([h1, w1, h2, w2, clsid, insid, char])
-
-            r, g, b = color
-            cmap[r*256*256 + g*256 + b] = insid
         
-        element['char_colormap'] = cmap
-        """
         if 'seglabel' in element:
             seg = element['seglabel']
             if len(seg.shape)==3:
@@ -489,18 +355,13 @@ class SemanticFormatter(object):
         im = element['image']
         seglabel = element['seglabel']
         igmask = seglabel == self.ignore_label
-        #if seglabel is None:
-        #    seglabel = im
-        #seglabel[seglabel>0] = 1
-        ##seglabel[seglabel==255] = 0
         seglabel[seglabel>0] = 1
         seglabel[igmask] = self.ignore_label
         return im.astype(np.float32), seglabel.astype(int), element['unique_id']
 
 @regformat()
 class InstanceFormatter(object):
-    def __init__(self, 
-                 **kwargs):
+    def __init__(self, **kwargs):
         pass
 
     def __call__(self, element):
@@ -524,8 +385,7 @@ class PanopticFormatter(object):
 
 @regformat()
 class DsmakerFormatter(object):
-    def __init__(self,
-                 **kwargs):
+    def __init__(self, **kwargs):
         pass
 
     def __call__(self, element):
