@@ -1,0 +1,112 @@
+global:
+  name: train
+  phase: train
+  stage: train-super
+  workdir: ../../test2
+  seed: ~
+ 
+dataset:
+  train: {
+    #roots: ['/../data_lmdb_release/training/MJ/MJ_train/', 
+    #        '/../data_lmdb_release/training/MJ/MJ_test/', 
+    #        '/../data_lmdb_release/training/MJ/MJ_valid/', 
+    #        '/../data_lmdb_release/training/ST'],
+    #roots: ['/../data-real/training/label/real/1.SVT',
+    #        '/../data-real/training/label/real/2.IIIT',
+    #        '/../data-real/training/label/real/3.IC13',
+    #        '/../data-real/training/label/real/4.IC15',
+    #        '/../data-real/training/label/real/5.COCO',
+    #        '/..data-real/training/label/real/6.RCTW17',
+    #        '/../data-real/training/label/real/7.Uber',
+    #        '/../data-real/training/label/real/8.ArT',
+    #        '/../data-real/training/label/real/9.LSVT',
+    #        '/../data-real/training/label/real/10.MLT19',
+    #        '/../data-real/training/label/real/11.ReCTS'],
+    roots: ['/../data_real/training/label/real/1.SVT'],
+    #'/../data_real/training/label/real/2.IIIT',],
+    #'../data_real/training/label/real/3.IC13',
+    #'../data_real/training/label/real/4.IC15',
+    #'../data_real/training/label/real/5.COCO',
+    #'../data_real/training/label/real/6.RCTW17',
+    #'../data_real/training/label/real/7.Uber',
+    #'../data_real/training/label/real/8.ArT',
+    #'../data_real/training/label/real/9.LSVT',
+    #'../data_real/training/label/real/10.MLT19',
+    #'../data_real/training/label/real/11.ReCTS'],
+    #'../data_real/evaluation/benchmark/SVTP'],
+    batch_size: 2 #64 #128
+  }
+  test: {
+    #roots: ['/../data_lmdb_release/evaluation/IIIT5k_3000', 
+    #        '/../data_lmdb_release/evaluation/SVT', 
+    #        '/../data_lmdb_release/evaluation/SVTP',
+    #        '/../data_lmdb_release/evaluation/IC13_857',
+    #        '/../data_lmdb_release/evaluation/IC15_1811',
+    #        '/../data_lmdb_release/evaluation/CUTE80'],
+    #roots:[
+     #'/../data_lmdb_release/evaluation/IC13_857'],
+     #'/../data_lmdb_release/evaluation/IC15_1811'],
+     #'/../data-real/evaluation/benchmark/CUTE80'],   
+     #'/../data-real/evaluation/benchmark/SVTP'],
+     #'/../data-real/evaluation/benchmark/SVT'],
+     #'/../data-real/evaluation/benchmark/IC13_1015'],
+     #'/../data-real/evaluation/benchmark/IC15_2077'],
+     #'/../data-real/evaluation/benchmark/IIIT5k_3000'],
+     #
+    roots: ['/../data_real/evaluation/benchmark/IC13_1015', #],
+            '/../data_real/evaluation/benchmark/IC15_2077',
+            '/../data_real/evaluation/benchmark/IIIT5k_3000',
+            '/../data_real/evaluation/benchmark/SVT',
+            '/../data_real/evaluation/benchmark/SVTP',
+            '/../data_real/evaluation/benchmark/CUTE80'],
+    batch_size: 64 #96 #128 #384
+  }
+  data_aug: True
+  multiscales: False
+  num_workers: 8 #14
+
+training:
+  epochs: 10
+  show_iters: 50
+  eval_iters: 200 #0
+  save_iters: 200 #3000
+
+optimizer:
+  type: Adam
+  true_wd: False
+  wd: 0.0
+  bn_wd: False
+  clip_grad: 20
+  lr: 0.0001
+  args: {
+    betas: !!python/tuple [0.9, 0.999], # for default Adam 
+  }
+  scheduler: {
+    periods: [6, 4],
+    gamma: 0.1,
+  }
+
+model:
+  name: 'modules.model_binet_iter.BINetIterModel'
+  iter_size: 3
+  ensemble: ''
+  use_vision: False
+  vision: {
+    #checkpoint: /../workdir/pretrain-vision-model/best-pretrain-vision-model.pth,
+    checkpoint: /../workdir/pretrain-vision-model/best-pretrain-vision-model.pth,
+    loss_weight: 1.,
+    attention: 'attention', #'position',
+    backbone: 'transformer',
+    backbone_ln: 3,
+  }
+  language: {
+    #checkpoint:  /../workdir/pretrain-language-model/pretrain-language-model.pth,
+    checkpoint:  /../workdir/pretrain-language-model/pretrain-language-model.pth,
+    num_layers: 4,
+    loss_weight: 1.,
+    detach: True,
+    use_self_attn: False
+  }
+  alignment: {
+    loss_weight: 1.,
+  }
