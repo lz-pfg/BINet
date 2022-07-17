@@ -6,13 +6,16 @@ ECCV 2022
 
 ![22](./fig/22.jpg)
 
+
 ## Acknowledgements
 
 The code is based on the https://arxiv.org/pdf/2103.06495.pdf, we sincerely thank Fang et al. for the awesome repo. 
 
+
 ## Runtime Environment
 
 pip install -r requirements.txt
+
 
 ## Datasets
 
@@ -43,7 +46,6 @@ Get the pretrained models from [BaiduNetdisk(passwd:kwck)](https://pan.baidu.com
 
 ```
 CUDA_VISIBLE_DEVICES=0 python main.py --config=configs/train.yaml
-    
 ```
 
 ## Evaluation
@@ -59,7 +61,7 @@ Additional flags:
 
 
 ## Visualization
-
+Comparison of attention-based methods with ours on complex background images.
 ![s](./fig/s.jpg)
 
 ## Citation
