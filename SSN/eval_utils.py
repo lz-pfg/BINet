@@ -67,9 +67,6 @@ class listDataset(Dataset):
         self.p_aug = p_aug
         self.vert_test = vert_test
 
-        #if inTrain:
-        #    self.aug = Augmenter(p=self.p_aug)
-
         self.convert_mode = 'RGB'
         self.check_length = True
         self.max_length = 25
@@ -99,10 +96,6 @@ class listDataset(Dataset):
             try:
                 label = str(txn.get(label_key.encode()), 'utf-8')  # label
                 label = re.sub('[^0-9a-zA-Z]+', '', label)
-                #if self.check_length and self.max_length > 0:
-                #    if len(label) >= self.max_length or len(label) <= 0:
-                        #logging.info(f'Long or short text image is found: {self.name}, {idx}, {label}, {len(label)}')
-                #        return self._next_image(index)
                 label = label[:self.max_length]
                 label = label.lower()
 
@@ -114,10 +107,7 @@ class listDataset(Dataset):
                     warnings.simplefilter("ignore", UserWarning) # EXIF warning from TiffPlugin
                     image = PIL.Image.open(buf).convert(self.convert_mode)
                     image = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
-                #if self.inTrain and not self._check_image(image):
-                    #logging.info(f'Invalid image is found: {self.name}, {idx}, {label}, {len(label)}')
-                #    return self._next_image(index)
-
+                
                 h, w, _ = image.shape
                 #if min(h, w)<=5:
                 #    return self._next_image(index)
@@ -130,9 +120,7 @@ class listDataset(Dataset):
 
     def __getitem__(self, index):
         assert index <= len(self), 'index range error'
-
         image, label, idx_new = self.get(index)
-
         h, w, _ = image.shape
 
         image = image.astype(np.float32) / 255  # image
@@ -149,13 +137,8 @@ class listDataset(Dataset):
         return (image, label, idx_new)
 
 
-
-
-
-
 class eval(exec_container):
     def prepare_dataloader(self):
-        
         cfg = cfguh().cfg
         train_list = [
             #'/../data_real/evaluation/benchmark/CUTE80', ]
@@ -199,9 +182,7 @@ class eval(exec_container):
                                   drop_last=False, pin_memory=False,
                                   collate_fn=collate(),
                                                    )
-        ##"""
-        return {
-            'dataloader' : evalloader,}
+        return {'dataloader' : evalloader,}
 
 def set_cfg(cfg, dsname):
     cfg.CUDA = True
