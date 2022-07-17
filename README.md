@@ -66,7 +66,7 @@ Additional flags:
 
 
 ## Visualization
-Comparison of attention-based methods with ours on complex background images.
+Example STR comparison of attention-based methods with ours on complex background images.
 ![s](./fig/s.jpg)
 
 
