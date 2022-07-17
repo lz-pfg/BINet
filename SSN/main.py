@@ -55,7 +55,7 @@ if __name__ == '__main__':
     parser.add_argument('--pth'   , type=str)
     parser.add_argument('--gpu'   , nargs='+', type=int)
     parser.add_argument('--port'  , type=int, default=11233)
-    parser.add_argument('--dsname', type=str, default='textseg')
+    parser.add_argument('--dsname', type=str, default='icdar13')
     parser.add_argument('--trainwithcls', action='store_true', default=False)
     args = parser.parse_args()
 
@@ -152,8 +152,8 @@ if __name__ == '__main__':
             elif args.dsname == 'icdar13':
                 cfg.DATA.LOADER_PIPELINE = [
                     'NumpyImageLoader', 
-                    'NumpySeglabelLoader', ] #'SeglabelLoader', #
-                    #'Icdar13_CharBboxLoader_Original',] #  'CharBboxSpLoader',]
+                    'NumpySeglabelLoader', ]
+                    #'Icdar13_CharBboxLoader_Original',] 
                 cfg.DATA.TRANS_PIPELINE = [
                     #'UniformNumpyType',
                     #'NormalizeUint8ToZeroOne',
@@ -168,9 +168,7 @@ if __name__ == '__main__':
             cfg.DATA.RANDOM_RESIZE_CROP_FROM = 'sem'
             cfg.MODEL.TEXRNET.INTRAIN_GETPRED_FROM = 'sem'
             # the one with 93.98% and trained on semantic crops 
-            cfg.TRAIN.CLASSIFIER_PATH = osp.join(
-                '/home/lz4/Documents/textseg/pretrained', 'init', 'resnet50_textcls.pth',
-            )
+            cfg.TRAIN.CLASSIFIER_PATH = ''
             cfg.TRAIN.ROI_BBOX_PADDING_TYPE = 'semcrop'
             cfg.TRAIN.ROI_ALIGN_SIZE = [32, 32]
             cfg.TRAIN.UPDATE_CLASSIFIER = False
