@@ -96,7 +96,7 @@ cfg_icdar13 = copy.deepcopy(cfg)
 cfg_icdar13.DATASET_NAME = 'icdar13'
 #cfg_icdar13.ROOT_DIR = osp.abspath(osp.join(
 #    osp.dirname(__file__), '..', 'data', 'ICDAR13'))
-cfg_icdar13.ROOT_DIR = '/home/lz4/Documents/whyfewlabel/data_real/training/label/real'
+cfg_icdar13.ROOT_DIR = '/../data_real/training/label/real'
 cfg_icdar13.CLASS_NUM = 2
 cfg_icdar13.CLASS_NAME = [
     'background', 
