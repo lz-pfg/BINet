@@ -5,11 +5,7 @@
 ECCV 2022
 
 ![22](./fig/22.jpg)
-
-
-## Acknowledgements
-
-The code is based on the https://arxiv.org/pdf/2103.06495.pdf, we sincerely thank Fang et al. for the awesome repo. 
+ 
 
 
 ## Runtime Environment
@@ -76,4 +72,8 @@ If you find our method useful for your reserach, please cite
 @article
  ```
 
+
+## Acknowledgements
+
+The code is based on the https://arxiv.org/pdf/2103.06495.pdf, we sincerely thank Fang et al. for the awesome repo.
 
