@@ -39,6 +39,12 @@ pip install -r requirements.txt
     6. CUTE80 (CUTE)
   
   Original version of evaluation datasets can be found in https://github.com/ku21fan/STR-Fewer-Labels/blob/main/data.md.
+  
+  
+- Semantic Segmentation datasets, Use 'SSN/main.py' to generate segmentation results of above datasets. 
+    ```
+    python main.py --eval --pth [model path] --hrnet --gpu 0 --dsname [dataset name]
+    ```
 
 
 ## Pretrained Models
