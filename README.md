@@ -69,7 +69,14 @@ Example STR comparison of attention-based methods with ours on complex backgroun
 ## Citation
 If you find our method useful for your reserach, please cite
 ```bash 
-@article
+@inproceedings{zhao2022background,
+  title={Background-Insensitive Scene Text Recognition with Text Semantic Segmentation},
+  author={Zhao, Liang and Wu, Zhenyao and Wu, Xinyi and Wilsbacher, Greg and Wang, Song},
+  booktitle={European Conference on Computer Vision},
+  pages={163--182},
+  year={2022},
+  organization={Springer}
+}
  ```
 
 
